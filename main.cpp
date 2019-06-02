@@ -44,14 +44,18 @@ class Heap3
 
     void heapifyDown(int i)
     {
-        int minIndex = i;
-        int childIndex = getKChildIndex(i, 1);
+		printList();
+		int minIndex = i;
+		int childIndex;
 
         while(1) {
             minIndex = i;
             //szukanie najmniejszego dziecka
-            for( ; childIndex < size() && childIndex <= getKChildIndex(i,d) ; ++childIndex)
+            for(childIndex = getKChildIndex(i, 1);  childIndex <= getKChildIndex(i,d) ; ++childIndex)
             {
+				if (childIndex >= size()) {
+					break;
+				}
                 if(heap[childIndex].first < heap[minIndex].first)
                 {
                     minIndex = childIndex;
@@ -63,15 +67,11 @@ class Heap3
                 break;
             }
             else {
-                swap(heap[minIndex], heap[i]);
-
-                i = minIndex;
+			swap(heap[minIndex], heap[i]);
+			printList();
+			i = minIndex;
             }
-
-
         }
-
-
     }
 
     public:
@@ -109,8 +109,10 @@ class Heap3
             KeyValueType returnValue = heap[0];
             KeyValueType last = heap[heap.size() - 1];
             heap.pop_back();
-            swap(heap[0], last);
-            heapifyDown(0);
+            if (heap.size() > 0) {
+				swap(heap[0], last);
+				heapifyDown(0);
+			}
             return returnValue;
         }
     }
@@ -140,6 +142,14 @@ class Heap3
         printKElement(stream, indent + 1, getKChildIndex(k, 3));
     }
 
+	void printList() {
+		
+		for (int i = 0; i < heap.size(); ++i) {
+			cout << heap[i].first << " ";
+		}
+		cout << endl;
+	}
+
 };
 
 int main()
@@ -155,10 +165,11 @@ int main()
     if (!heap.isEmpty()) {
         cout << "Not empty heap" << endl;
     }
-    heap.pop();
-    if (heap.isEmpty()) {
-        cout << "Empty heap after pop" << endl;
-    }
+	
+	heap.pop();
+	if (heap.isEmpty()) {
+		cout << "Empty heap after pop" << endl;
+	}
 
     heap.insert(12,12);
     heap.insert(5,5);
